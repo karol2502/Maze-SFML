@@ -6,7 +6,6 @@
 class Game
 {
 	sf::RenderWindow* window;
-
 	GameStateManager* gameStateManager;
 	bool running;
 

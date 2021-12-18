@@ -6,6 +6,11 @@ MazeGenerator::MazeGenerator(int width, int height) : cells(width*height), walls
 	this->height = height;
 }
 
+MazeGenerator::~MazeGenerator()
+{
+	generatedWalls.clear();
+}
+
 void MazeGenerator::Generate()
 {
 	while (walls.getWallsToCheckSize())

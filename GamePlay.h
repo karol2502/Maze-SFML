@@ -3,6 +3,7 @@
 #include "MazeGenerator.h"
 #include <iostream>
 #include "GameStateManager.h"
+#include "Player.h"
 
 class GamePlay :public GameState
 {
@@ -15,20 +16,28 @@ class GamePlay :public GameState
 	int borderSize;
 	int cellSize;
 
+	sf::Color bgColor;
+	sf::Color wallsColor;
+
 	sf::View viewPlay;
 	sf::View defaultView;
 
 	MazeGenerator mazeGenerator;
 	std::map<int, int> maze;
 
-	sf::RenderWindow *window;
-	GameStateManager *gameStateManager;
+	sf::RenderWindow* window;
+	GameStateManager* gameStateManager;
 
 	std::vector<sf::RectangleShape*> walls;
 
+	sf::Clock clock;
+
+	Player player;
+	float playerSpeed;
+
 	void DrawMaze();
 
-public:		
+public:
 	GamePlay(int width, int height, sf::RenderWindow* window, GameStateManager* gameStateManager);
 
 	void Init() override;

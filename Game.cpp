@@ -45,4 +45,5 @@ void Game::Clear()
 	}	
 
 	delete gameStateManager;	
+	delete window;
 }

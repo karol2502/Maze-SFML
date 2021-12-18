@@ -13,6 +13,7 @@ class MazeGenerator
 
 public:
 	MazeGenerator(int width, int height);
+	~MazeGenerator();
 	void Generate();
 	std::map<int, int> getGeneratedMaze();
 };
