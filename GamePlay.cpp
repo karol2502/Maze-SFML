@@ -102,13 +102,11 @@ void GamePlay::Init()
 }
 
 void GamePlay::Cleanup()
-{
-	/*
+{	
 	for (auto const& wall : walls)
 	{
 		delete wall;
-	}
-	*/
+	}	
 	walls.clear();
 }
 

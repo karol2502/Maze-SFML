@@ -1,6 +1,6 @@
 #include "GameStateManager.h"
 
-void GameStateManager::ChangeState(GameState* state)
+void GameStateManager::ChangeState(GameState* state, int GamePlay)
 {
 	// Cleanup the current state.
 	if (!states.empty())
@@ -8,6 +8,12 @@ void GameStateManager::ChangeState(GameState* state)
 		states.back()->Cleanup();
 		delete states.back();
 		states.pop_back();
+		if (!states.empty() && GamePlay == 1)
+		{
+			states.back()->Cleanup();
+			delete states.back();
+			states.pop_back();
+		}
 	}
 
 	// Store and init the new state.

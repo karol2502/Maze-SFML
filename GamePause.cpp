@@ -78,7 +78,7 @@ void GamePause::GetEvents()
 					}
 					else if (elem.first == "menu")
 					{
-						gameStateManager->ChangeState(new GameMenu(window, gameStateManager));
+						gameStateManager->ChangeState(new GameMenu(window, gameStateManager), 1);
 						return;
 					}
 				}
