@@ -72,6 +72,24 @@ void GamePlay::DrawMaze()
 	}
 }
 
+void GamePlay::CalculateVisibleWalls()
+{
+	//clear vector every frame
+	visibleWalls.clear();
+
+	sf::Vector2f viewCenter(window->getView().getCenter());
+	sf::Vector2f viewSize(window->getView().getSize());
+	sf::FloatRect currentViewRect(viewCenter - viewSize / 2.f, viewSize);
+
+	for (auto const& value : walls)
+	{
+		if ((*value).getGlobalBounds().intersects(currentViewRect))
+		{
+			visibleWalls.emplace_back(value);
+		}
+	}
+}
+
 GamePlay::GamePlay(int width, int height, sf::RenderWindow* window, GameStateManager* gameStateManager)
 	: mazeGenerator(width, height),
 	player(40, sf::Color::Blue, 100)
@@ -148,73 +166,63 @@ void GamePlay::GetEvents()
 	// do poprawy
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		player.updateDirection(DIR::LEFT);
+		player.updateDirection(-1, 0);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		player.updateDirection(DIR::RIGHT);
+		player.updateDirection(1, 0);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		player.updateDirection(DIR::UP);
+		player.updateDirection(0, -1);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		player.updateDirection(DIR::DOWN);
+		player.updateDirection(0, 1);
 	}
 	else
 	{
-		player.updateDirection(DIR::NONE);
+		player.updateDirection(0, 0);
 	}
 }
 
 void GamePlay::Update()
 {
+	CalculateVisibleWalls();
+
 	sf::Time elapsed = clock.getElapsedTime();
 	float delta = elapsed.asSeconds();
 	clock.restart();
 
 	float distance = playerSpeed * delta;
+	sf::Vector2f futurePosition(player.getPosition() + player.direction() * distance);
 
-	switch (player.direction())
+	sf::FloatRect futureBounds(futurePosition, player.getSize());
+	
+	bool canMove = true;
+	for (auto const& value : visibleWalls)
 	{
-	case DIR::UP:
-		player.move(0, -distance);
-		viewPlay.move(0, -distance);
-		break;
-	case DIR::RIGHT:
-		player.move(distance, 0);
-		viewPlay.move(distance, 0);
-		break;
-	case DIR::DOWN:
-		player.move(0, distance);
-		viewPlay.move(0, distance);
-		break;
-	case DIR::LEFT:
-		player.move(-distance, 0);
-		viewPlay.move(-distance, 0);
-		break;
-	default:
-		break;
+		if (futureBounds.intersects(value->getGlobalBounds()))
+		{
+			canMove = false;
+		}
 	}
-	window->setView(viewPlay);
+
+	if (canMove)
+	{
+		player.move(player.direction() * distance);
+		viewPlay.move(player.direction() * distance);
+		window->setView(viewPlay);
+	}	
 }
 
 void GamePlay::Display()
 {
 	window->clear(bgColor);
 
-	//optimalize only draw what is visible
-	sf::Vector2f viewCenter(window->getView().getCenter());
-	sf::Vector2f viewSize(window->getView().getSize());
-	sf::FloatRect currentViewRect(viewCenter - viewSize / 2.f, viewSize);
-
-	for (auto const& value : walls)
+	for (auto const& value : visibleWalls)
 	{
-		if ((*value).getGlobalBounds().intersects(currentViewRect))
-		{
-			window->draw(*value);
-		}		
+		window->draw(*value);		
 	}
 	window->draw(player);
 	window->display();

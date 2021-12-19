@@ -29,6 +29,7 @@ class GamePlay :public GameState
 	GameStateManager* gameStateManager;
 
 	std::vector<sf::RectangleShape*> walls;
+	std::vector<sf::RectangleShape*> visibleWalls;
 
 	sf::Clock clock;
 
@@ -36,6 +37,7 @@ class GamePlay :public GameState
 	float playerSpeed;
 
 	void DrawMaze();
+	void CalculateVisibleWalls();
 
 public:
 	GamePlay(int width, int height, sf::RenderWindow* window, GameStateManager* gameStateManager);
