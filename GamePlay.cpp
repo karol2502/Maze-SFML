@@ -204,9 +204,17 @@ void GamePlay::Display()
 {
 	window->clear(bgColor);
 
+	//optimalize only draw what is visible
+	sf::Vector2f viewCenter(window->getView().getCenter());
+	sf::Vector2f viewSize(window->getView().getSize());
+	sf::FloatRect currentViewRect(viewCenter - viewSize / 2.f, viewSize);
+
 	for (auto const& value : walls)
 	{
-		window->draw(*value);
+		if ((*value).getGlobalBounds().intersects(currentViewRect))
+		{
+			window->draw(*value);
+		}		
 	}
 	window->draw(player);
 	window->display();
