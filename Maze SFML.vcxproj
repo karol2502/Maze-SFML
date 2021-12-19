@@ -148,7 +148,9 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="DisjSet.cpp" />
+    <ClCompile Include="EndPoint.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameEnd.cpp" />
     <ClCompile Include="GameLoading.cpp" />
     <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="GamePause.cpp" />
@@ -163,7 +165,9 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="DisjSet.h" />
+    <ClInclude Include="EndPoint.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameEnd.h" />
     <ClInclude Include="GameLoading.h" />
     <ClInclude Include="GameMenu.h" />
     <ClInclude Include="GamePause.h" />

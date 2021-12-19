@@ -1,6 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-#include<functional>
+#include <functional>
 #include "GameStateManager.h"
 
 class Button : public sf::Drawable

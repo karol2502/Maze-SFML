@@ -1,5 +1,6 @@
 #include "GamePlay.h"
 #include "GamePause.h"
+#include "GameEnd.h"
 
 void GamePlay::DrawMaze()
 {
@@ -92,23 +93,14 @@ void GamePlay::CalculateVisibleWalls()
 
 GamePlay::GamePlay(int width, int height, sf::RenderWindow* window, GameStateManager* gameStateManager)
 	: mazeGenerator(width, height),
-	player(40, sf::Color::Blue, 100)
+	player(40, sf::Color::Blue, 100),
+	endPoint("Exit", sf::Vector2f((width - 1)* (cellSize + vertWallSize.x) + cellSize / 2.f, (height - 1)* (cellSize + horWallSize.y) + cellSize / 2.f), sf::Vector2f(60, 40), 40)
 {
 	this->width = width;
 	this->height = height;
 
 	this->window = window;
 	this->gameStateManager = gameStateManager;
-
-	vertWallSize = sf::Vector2f(50, 100);
-	horWallSize = sf::Vector2f(100, 50);
-	cellSize = 100;
-	borderSize = 4;
-
-	playerSpeed = 300.f;
-
-	bgColor = sf::Color::Black;
-	wallsColor = sf::Color(138, 25, 36);
 
 	viewPlay.reset(sf::FloatRect(0.f, 0.f, 1280.f, 720.f));
 	viewPlay.setCenter(sf::Vector2f(cellSize / 2, cellSize / 2));
@@ -191,6 +183,7 @@ void GamePlay::Update()
 	CalculateVisibleWalls();
 
 	sf::Time elapsed = clock.getElapsedTime();
+	playTime += elapsed;
 	float delta = elapsed.asSeconds();
 	clock.restart();
 
@@ -198,7 +191,7 @@ void GamePlay::Update()
 	sf::Vector2f futurePosition(player.getPosition() + player.direction() * distance);
 
 	sf::FloatRect futureBounds(futurePosition, player.getSize());
-	
+
 	bool canMove = true;
 	for (auto const& value : visibleWalls)
 	{
@@ -207,13 +200,18 @@ void GamePlay::Update()
 			canMove = false;
 		}
 	}
-
 	if (canMove)
 	{
 		player.move(player.direction() * distance);
 		viewPlay.move(player.direction() * distance);
 		window->setView(viewPlay);
-	}	
+	}
+
+	if (player.getGlobalBounds().intersects(endPoint.getGlobalBounds()))
+	{
+		gameStateManager->PushState(new GameEnd(window, gameStateManager, playTime));
+		return;
+	}
 }
 
 void GamePlay::Display()
@@ -222,8 +220,9 @@ void GamePlay::Display()
 
 	for (auto const& value : visibleWalls)
 	{
-		window->draw(*value);		
+		window->draw(*value);
 	}
 	window->draw(player);
+	window->draw(endPoint);
 	window->display();
 }

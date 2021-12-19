@@ -4,20 +4,21 @@
 #include <iostream>
 #include "GameStateManager.h"
 #include "Player.h"
+#include "EndPoint.h"
 
 class GamePlay :public GameState
 {
 	int width;
 	int height;
 
-	sf::Vector2f vertWallSize;
-	sf::Vector2f horWallSize;
+	sf::Vector2f vertWallSize = sf::Vector2f(50, 100);
+	sf::Vector2f horWallSize = sf::Vector2f(100, 50);
 
-	int borderSize;
-	int cellSize;
+	int borderSize = 6;
+	int cellSize = 100;
 
-	sf::Color bgColor;
-	sf::Color wallsColor;
+	sf::Color bgColor = sf::Color::Black;
+	sf::Color wallsColor = sf::Color(138, 25, 36);
 
 	sf::View viewPlay;
 	sf::View defaultView;
@@ -32,9 +33,12 @@ class GamePlay :public GameState
 	std::vector<sf::RectangleShape*> visibleWalls;
 
 	sf::Clock clock;
+	sf::Time playTime;
 
 	Player player;
-	float playerSpeed;
+	float playerSpeed = 300.f;
+
+	EndPoint endPoint;
 
 	void DrawMaze();
 	void CalculateVisibleWalls();
