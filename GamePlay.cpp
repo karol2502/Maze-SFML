@@ -125,6 +125,7 @@ void GamePlay::Cleanup()
 		delete wall;
 	}
 	walls.clear();
+	visibleWalls.clear();
 }
 
 void GamePlay::Pause()

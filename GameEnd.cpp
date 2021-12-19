@@ -24,7 +24,7 @@ void GameEnd::Init()
 	title.setPosition(sf::Vector2f(winSize.x / 2.f, 1.f * (winSize.y / 9.f)));
 
 	std::string timeString = std::to_string(std::round(time.asSeconds() * 100.f) / 100.f);
-	timeString.erase(timeString.find_last_not_of('0') + 1, std::string::npos);
+	timeString = timeString.substr(0, timeString.size() - 4);
 	timeText = sf::Text("Your time:\n" + timeString + "s", font, 80);
 	sf::FloatRect timeRect = timeText.getLocalBounds();
 	timeText.setOrigin(sf::Vector2f(timeRect.left + timeRect.width / 2.0f, timeRect.top + timeRect.height / 2.0f));
